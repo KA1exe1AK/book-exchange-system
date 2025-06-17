@@ -1,9 +1,8 @@
 groups:
 - name: django-alerts
   rules:
-  # 1. Алерт на недостаток книг
   - alert: LowBooksInGenre
-    expr: books_available{genre!="all"} > 3  # Проверяем что книг меньше 3
+    expr: books_available{genre!="all"} > 3  
     for: 1m
     labels:
       severity: 'warning'
@@ -11,7 +10,6 @@ groups:
       summary: "Мало книг в жанре {{ $labels.genre }}"
       description: "В жанре {{ $labels.genre }} осталось {{ $value }} книг"
 
-  # 2. Алерт на высокую задержку (исправленный синтаксис)
   - alert: HighRequestLatency
     expr: histogram_quantile(0.95, rate(request_latency_seconds_bucket[1m])) > 1
     for: 1m
@@ -21,7 +19,6 @@ groups:
       summary: "Высокая задержка для {{ $labels.endpoint }}"
       description: "95-й перцентиль задержки = {{ $value }}s"
 
-  # 3. Алерт на проблемы с БД
   - alert: PostgresHighLoad
     expr: |
       pg_stat_activity_count > 20
@@ -39,50 +36,3 @@ groups:
       description: "Активные соединения: {{ $value }}"
 
 
-# groups:
-# - name: django-alerts
-#   rules:
-#   # 1. Алерт на недостаток книг (срабатывает если меньше 3 книг в каком-либо жанре)
-#   - alert: LowBooksInGenre
-#     expr: books_available < 3
-#     for: 0m
-#     labels:
-#       severity: 'warning'
-#     annotations:
-#       summary: "Мало книг в жанре {{ $labels.genre }} ({{ $value }})"
-#       description: "В жанре {{ $labels.genre }} осталось меньше 3 книг"
-
-#   # 2. Алерт на высокую задержку (срабатывает если 95-й перцентиль > 1 сек)
-#   - alert: HighRequestLatency
-#     expr: |
-#       histogram_quantile(0.95, rate(request_latency_seconds_bucket[1m])) > 1
-#     for: 0m
-#     labels:
-#       severity: 'critical'
-#     annotations:
-#       summary: "Высокая задержка для {{ $labels.endpoint }}"
-#       description: "95-й перцентиль задержки {{ $value | humanizeDuration }}"
-
-#   # 3. Алерт на проблемы с БД (срабатывает при высокой нагрузке)
-#   - alert: PostgresHighLoad
-#     expr: |
-#       pg_stat_activity_count > 1 or 
-#       (pg_stat_database_blks_hit / (pg_stat_database_blks_hit + pg_stat_database_blks_read)) < 0.9
-#     for: 0m
-#     labels:
-#       severity: 'critical'
-#     annotations:
-#       summary: "Проблемы с PostgreSQL ({{ $value }})"
-#       description: "Высокая нагрузка на базу данных"
-
-# groups:
-# - name: django-alerts
-#   rules:
-#   - alert: LowAvailableBooks
-#     expr: books_available > 0  # Тестовое условие, которое всегда истинно
-#     for: 1m
-#     labels:
-#       severity: 'critical'
-#     annotations:
-#       summary: "Тестовый алерт: доступные книги"
-#       description: "Значение метрики: {{ $value }}"

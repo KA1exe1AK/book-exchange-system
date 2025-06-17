@@ -22,7 +22,7 @@ class Books(models.Model):
     author = models.CharField(max_length=150, verbose_name='Автор')
     slug = models.SlugField(max_length=200, blank=True, null=True, verbose_name='URL')
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
-    image = models.ImageField(upload_to='books_images',blank=True, null=True, verbose_name='Изображение')
+    image = models.ImageField(blank=True, null=True, verbose_name='Изображение')
     city = models.CharField(max_length=150, verbose_name='Город')
     owner = models.ForeignKey(to = User, on_delete=models.PROTECT, verbose_name='Владелец')
     status = models.CharField(max_length=150, verbose_name='Статус')
@@ -44,8 +44,3 @@ class Books(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-
-    
-    
-
-

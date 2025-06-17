@@ -98,14 +98,14 @@ def add_book(request):
 @login_required
 def delete_book(request, book_id):
     book = Books.objects.get(pk=book_id)
-    if book.owner == request.user:  # Проверка, что пользователь владеет книгой
+    if book.owner == request.user:  # пользователь влаеет книгой
         book.delete()
-        return redirect('users:profile')  # Перенаправьте на профиль пользователя
+        return redirect('users:profile')  
     else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required
 def my_books(request):
-    books = Books.objects.filter(owner=request.user)  # Получаем книги текущего пользователя
+    books = Books.objects.filter(owner=request.user)  # получаем книги текущего пользователя
     return render(request, 'users/my_books.html', {'books': books})
