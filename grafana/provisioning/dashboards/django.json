@@ -1,0 +1,68 @@
+{
+  "title": "Django Books Monitoring",
+  "uid": "django-books",
+  "tags": ["django", "books"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "title": "Available Books by Genre",
+      "type": "barchart",
+      "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+      "targets": [
+        {
+          "expr": "books_available{genre!='all'}",
+          "legendFormat": "{{genre}}",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "legend": {"displayMode": "list", "placement": "right"},
+        "tooltip": {"mode": "multi"}
+      }
+    },
+    {
+      "title": "Book Operations Counter",
+      "type": "stat",
+      "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+      "targets": [
+        {
+          "expr": "sum(books_exchanged_total)",
+          "legendFormat": "Total operations",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "value"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "green", "value": null},
+            {"color": "red", "value": 80}
+          ]}
+        }
+      }
+    },
+    {
+      "title": "Request Latency by Endpoint",
+      "type": "heatmap",
+      "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(request_latency_seconds_bucket[5m])) by (le, endpoint))",
+          "legendFormat": "{{endpoint}}",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "genre",
+        "label": "Genre",
+        "type": "query",
+        "query": "label_values(books_available, genre)",
+        "refresh": 1
+      }
+    ]
+  }
+}

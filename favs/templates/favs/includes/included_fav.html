@@ -1,0 +1,16 @@
+{% load static %}
+
+<div class="card mb-3 text-bg-light shadow-lg">
+    {% for fav in favs %}
+        <div class="card-header">
+            <h5 class="card-title"><a href="{% url "catalog:book" fav.book.slug %}">
+                <p class="card-title">{{ fav.book.name }}</p>
+            </a>
+                <a href="{% url "fav:fav_remove" fav.id %}" class="remove-from-fav" data-fav-id="">
+                    <img class="mx-1" src="{% static "deps/icons/trash3-fill.svg" %}"
+                        alt="Catalog Icon" width="16" height="16">
+                </a>
+            </h5>
+        </div>
+    {% endfor %}
+</div>

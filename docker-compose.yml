@@ -1,0 +1,29 @@
+#version: '3.8'
+
+services:
+  django:
+    image: alexxkovv/5-kaa:latest
+    container_name: django_container
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - pgdb
+
+  pgdb:
+    image: postgres
+    container_name: postgres_container
+    environment:
+      POSTGRES_DB: cks
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_INITDB_ARGS: "-A md5"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:

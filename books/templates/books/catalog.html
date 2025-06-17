@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% load books_tags %}
+
+{% block modal_fav %}
+{% include "includes/fav_button.html" %}
+{% endblock  %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for book in books %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="position-relative">  
+                    <a href="{% url "catalog:book" book.slug %}">
+                        <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="{{ book.name }}" style="object-fit: cover;">
+                    </a>
+                    <div class="card-img-overlay d-flex justify-content-end align-items-end">
+                        <div><a href="{% url "fav:fav_add" book.slug %}" class="btn add-to-fav">
+                            <img class="mx-1" src="{% static "deps/icons/red-heart-icon.svg" %}" alt="Catalog Icon"
+                                width="32" height="32">
+                        </a></div>  
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url "catalog:book" book.slug %}">{{ book.name }}</a></h5>
+                    <p class="card-text text-truncate">{{ book.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center my-4">
+            <div class="custom-shadow d-flex align-items-center">
+                <li class="page-item {% if not books.has_previous %}disabled{% endif %}">
+                    <a class="page-link" href="{% if books.has_previous %}?{% change_params page=books.previous_page_number%}{% else %}"
+                    {% endif %}>Назад</a>
+                </li>
+    
+                {% for page in books.paginator.page_range %}
+                {% if page >= books.number|add:-2 and page <= books.number|add:2 %}
+                    <li class="page-item {% if books.number == page %}active{% endif %}">
+                        <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
+                    </li>
+                {% endif %}
+                {% endfor %}
+    
+                <li class="page-item {% if not books.has_next %}disabled{% endif %}">
+                    <a class="page-link" href="{% if books.has_next %}?{% change_params page=books.next_page_number%}{% else %}"
+                    {% endif %}>Вперед</a>
+                </li>
+            </div>
+        </ul>
+    </nav>
+    
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="py-4 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; CKS 2024</p>
+    </div>
+</footer>
+{% endblock %}

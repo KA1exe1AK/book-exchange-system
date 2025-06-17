@@ -1,0 +1,32 @@
+{% load static %}
+{% load favs_tags %}
+
+{% user_favs request as favs %}
+
+<div>
+    <button type="button" class="btn btn-dark btn-secondary d-flex" id="modalButton"
+        aria-expanded="false">
+        <img class="mx-1" src="{% static "deps/icons/heart.svg" %}" alt="Catalog Icon" width="24"
+            height="24">
+    </button>
+</div>
+<!-- Разметка модального окна корзины -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center mb-4">Избранное</h3>
+                <div class="container" id="fav-items-container">
+                    <!-- Разметка корзины -->
+                    {% include "favs/includes/included_fav.html" %}
+                    <!-- Закончилась разметка корзины -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

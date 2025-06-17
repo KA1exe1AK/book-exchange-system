@@ -1,0 +1,20 @@
+route:
+  receiver: 'email-notifications'
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 5m
+
+receivers:
+- name: 'email-notifications'
+  email_configs:
+  - to: ${ALERTMANAGER_EMAIL}
+    from: ${ALERTMANAGER_EMAIL}
+    smarthost: ${SMTP_HOST}:${SMTP_PORT}
+    auth_username: ${ALERTMANAGER_EMAIL}
+    auth_password: ${ALERTMANAGER_EMAIL_PASSWORD}
+    require_tls: false
+    headers:
+      Subject: 'ALERT: {{ .CommonLabels.alertname }}'
+    html: |
+      <h3>{{ .CommonAnnotations.summary }}</h3>
+      <p>{{ .CommonAnnotations.description }}</p>

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load favs_tags %}
+{% block content %}
+  <div class="container">
+    <h2>Мои книги</h2>
+    {% if books %}
+      <div class="row">
+        {% for book in books %}
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.name }}">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url "catalog:book" book.slug %}">{{ book.name }}</a></h5>
+                <p class="card-text">Автор: {{ book.author }}</p>
+                <div class="d-flex justify-content-end">
+                  <a href="{% url 'users:delete_book' book.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center">Вы еще не добавили ни одной книги.</p>
+    {% endif %}
+  </div>
+{% endblock %}

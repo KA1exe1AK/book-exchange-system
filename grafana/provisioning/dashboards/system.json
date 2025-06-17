@@ -1,0 +1,65 @@
+{
+  "title": "Django System Health",
+  "uid": "django-system",
+  "tags": ["django", "system"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "title": "HTTP Requests Rate",
+      "type": "graph",
+      "gridPos": {"x": 0, "y": 0, "w": 8, "h": 6},
+      "targets": [
+        {
+          "expr": "rate(django_http_requests_total[5m])",
+          "legendFormat": "{{endpoint}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "title": "Error Rate",
+      "type": "gauge",
+      "gridPos": {"x": 8, "y": 0, "w": 4, "h": 6},
+      "targets": [
+        {
+          "expr": "rate(django_http_requests_total{status=~\"4..|5..\"}[5m]) / rate(django_http_requests_total[5m]) * 100",
+          "legendFormat": "Error %",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "min": 0,
+        "max": 100,
+        "thresholds": {
+          "steps": [
+            {"color": "green", "value": null},
+            {"color": "orange", "value": 5},
+            {"color": "red", "value": 10}
+          ]
+        }
+      }
+    },
+    {
+      "title": "Resource Usage",
+      "type": "stat",
+      "gridPos": {"x": 0, "y": 6, "w": 12, "h": 2},
+      "targets": [
+        {
+          "expr": "process_resident_memory_bytes",
+          "legendFormat": "Memory",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(process_cpu_seconds_total[1m]) * 100",
+          "legendFormat": "CPU %",
+          "refId": "B"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
+    }
+  ]
+}
