@@ -1,12 +1,23 @@
+# Файлы окружения
+.env
+env/
 venv/
-.pylintrc
+.venv/
+
+# Системные файлы
+.vscode/
+.idea/
 __pycache__/
-
-.vscode
-.idea
-
+*.pyc
+*.pyo
+*.pyd
+.pylintrc
 db.sqlite3
 media/
 node_modules/
+-o
 
-env
+# Логи и временные файлы
+*.log
+*.pot
+*.sqlite3
